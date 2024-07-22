@@ -9,7 +9,7 @@ from col_helpers import *
 CHUNK_SIZE = 1000
 MAX_RECORDS = 10000
 
-src = "data/original/used_cars_original.csv"
+src = "../data/original/used_cars_original.csv"
 dest = "data/processed/used_cars_processed.csv"
 
 
