@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 from cols_config import transmission_types, description_regex
 
@@ -24,6 +25,12 @@ def format_body_type(chunk):
                           .str.replace('/', '-', regex=False))
 
     return chunk
+
+
+def get_numeric_value(value):
+    str_value = str(value)
+    match = re.search(r'[\d.]+', str_value)
+    return float(match.group()) if match else 0.0
 
 
 def insert_default_value(chunk):

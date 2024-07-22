@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from cols_config import excluded_cols, col_types, MAX_COMPETITORS
+from cols_config import excluded_cols, numeric_columns, MAX_COMPETITORS
 from col_helpers import *
 
 # Ideal case => Chunk size = 1000, max_records = 10000
@@ -29,7 +29,7 @@ def get_competitors(df: pd.DataFrame) -> pd.DataFrame:
 def clean_records(source: str):
     records = pd.DataFrame()
 
-    for chunk in pd.read_csv(source, dtype=col_types, chunksize=CHUNK_SIZE):
+    for chunk in pd.read_csv(source, chunksize=CHUNK_SIZE):
 
         chunk = chunk.drop(columns=excluded_cols)
         chunk = insert_default_value(chunk)
@@ -42,6 +42,10 @@ def clean_records(source: str):
 
         if "body_type" in chunk.columns:
             chunk = format_body_type(chunk)
+
+        for col in numeric_columns:
+            if col in chunk.columns:
+                chunk[col] = chunk[col].astype(str).apply(get_numeric_value)
 
         records = pd.concat([records, chunk], ignore_index=True)
 
