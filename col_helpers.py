@@ -37,14 +37,13 @@ def insert_default_value(chunk):
 
     return chunk
 
+
 def get_competitor(df: pd.DataFrame, row: pd.Series):
-
-    # (df['seller_rating'] >= row['seller_rating'])
-
     competitor_info = df[
         (df['body_type'] == row['body_type']) &
         (row['price'] * 1.2 >= df['price']) &
         (df['price'] >= row['price'] * 0.8) &
+        (df['seller_rating'] >= row['seller_rating']) &
         (df['make_name'] != row['make_name'])
         ]
 
