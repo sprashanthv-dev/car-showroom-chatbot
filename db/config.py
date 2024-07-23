@@ -9,7 +9,6 @@ col_types = {
     'city': 'TEXT',
     'city_fuel_economy': 'REAL',
     'daysonmarket': 'INTEGER',
-    'description': 'TEXT',
     'engine_cylinders': 'TEXT',
     'engine_displacement': 'REAL',
     'engine_type': 'TEXT',
@@ -32,7 +31,6 @@ col_types = {
     'listing_id': 'INTEGER',
     'longitude': 'REAL',
     'main_picture_url': 'TEXT',
-    'major_options': 'TEXT',
     'make_name': 'TEXT',
     'maximum_seating': 'TEXT',
     'mileage': 'REAL',
@@ -51,5 +49,6 @@ col_types = {
     'wheel_system_display': 'TEXT',
     'wheelbase': 'REAL',
     'width': 'REAL',
-    'year': 'INTEGER'
+    'year': 'INTEGER',
+    'competitors': 'TEXT',
 }
