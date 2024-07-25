@@ -1,7 +1,8 @@
 import pandas as pd
 import re
+import ast
 
-from cols_config import transmission_types, description_regex
+from cols_config import transmission_types, description_regex, MAX_COMPETITORS
 
 
 def format_transmission_text(chunk):
@@ -26,6 +27,22 @@ def format_body_type(chunk):
 
     return chunk
 
+
+def format_major_options(chunk):
+
+    formatted_options_list = []
+
+    for option in chunk["major_options"]:
+        try:
+            options_list = ast.literal_eval(option)
+            formatted_option = "#".join(options_list)
+        except (ValueError, SyntaxError):
+            formatted_option = ""
+
+        formatted_options_list.append(formatted_option)
+
+    chunk["major_options"] = formatted_options_list
+    return chunk
 
 def get_numeric_value(value):
     str_value = str(value)
@@ -52,8 +69,27 @@ def get_competitor(df: pd.DataFrame, row: pd.Series):
         (df['price'] >= row['price'] * 0.8) &
         (df['seller_rating'] >= row['seller_rating']) &
         (df['make_name'] != row['make_name'])
-        ]
+        ].head(MAX_COMPETITORS)
 
     competitors_info = competitor_info.sort_values(by='daysonmarket')
+    formatted_competitors = []
 
-    return competitors_info
+    for index, row in competitors_info.iterrows():
+        formatted_competitors.append(format_competitor(row))
+
+    competitors_str = '$'.join(formatted_competitors)
+
+    return competitors_str
+
+
+def format_competitor(competitor: pd.Series):
+
+    make = competitor.get('make_name')
+    model = competitor.get('model_name')
+    price = competitor.get('price')
+
+    seller_rating = round(float(competitor.get('seller_rating', 0)), 1) if competitor.get('seller_rating') else 0.0
+
+    body_type = competitor.get('body_type')
+
+    return f"{make}#{model}#{body_type}#{price}#{seller_rating}"
