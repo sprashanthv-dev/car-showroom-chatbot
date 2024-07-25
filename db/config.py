@@ -3,7 +3,7 @@ TABLE_NAME = "car_specs"
 
 # Define table column types
 col_types = {
-    'vin': 'TEXT PRIMARY KEY',
+    'vin': 'TEXT',
     'back_legroom': 'REAL',
     'body_type': 'TEXT',
     'city': 'TEXT',
@@ -31,6 +31,7 @@ col_types = {
     'listing_id': 'INTEGER',
     'longitude': 'REAL',
     'main_picture_url': 'TEXT',
+    'major_options': 'TEXT',
     'make_name': 'TEXT',
     'maximum_seating': 'TEXT',
     'mileage': 'REAL',

@@ -12,11 +12,12 @@ MAX_RECORDS = 10000
 src = "../data/original/used_cars_original.csv"
 dest = "../data/processed/used_cars_processed.csv"
 
+
 def get_competitors(df: pd.DataFrame) -> pd.DataFrame:
     competitor_info = []
 
     for index, row in df.iterrows():
-        print(f"Processing row - {index}")
+        # print(f"Processing row - {index}")
         competitors = get_competitor(df, row)
         competitor_info.append(competitors)
 

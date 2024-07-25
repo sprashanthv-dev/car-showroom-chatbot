@@ -35,15 +35,18 @@ def transaction_bldr(sql):
     global sql_transaction
     sql_transaction.append(sql)
 
-    if len(sql_transaction) > 0:
+    if len(sql_transaction) > BUFFER_SIZE:
         c.execute('BEGIN TRANSACTION')
 
         for s in sql_transaction:
             try:
+                # print(f"Query before execute: {s}")
+                # print("------------------------------")
                 c.execute(s)
                 break
             except Exception as e:
-                print(f"Error in executing transaction: {s}")
+                print(f"Error in executing transaction: {e}")
+                print(f"sql: {s}")
 
         conn.commit()
         sql_transaction = []
@@ -61,7 +64,15 @@ def insert_into_car_specs():
         reader = csv.DictReader(f)
 
         for row in reader:
-            values = [row.get(col) for col in columns]
+            values = []
+
+            for col in columns:
+                val = row[col]
+
+                if col == "major_options" or col == "main_picture_url":
+                    val = val.replace("'", "''")
+
+                values.append(val)
 
             query_with_values = build_query_with_values(query, values)
             # print('Built Query:', query_with_values)
@@ -79,7 +90,7 @@ def main():
 
     # drop_table_car_specs()
     # print(f"Successfully dropped table {TABLE_NAME}")
-
+    #
     # create_table_car_specs()
     # print(f"Successfully created table {TABLE_NAME}")
 

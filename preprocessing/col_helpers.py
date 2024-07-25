@@ -87,7 +87,9 @@ def format_competitor(competitor: pd.Series):
     make = competitor.get('make_name')
     model = competitor.get('model_name')
     price = competitor.get('price')
-    seller_rating = competitor.get('seller_rating')
+
+    seller_rating = round(float(competitor.get('seller_rating', 0)), 1) if competitor.get('seller_rating') else 0.0
+
     body_type = competitor.get('body_type')
 
     return f"{make}#{model}#{body_type}#{price}#{seller_rating}"
