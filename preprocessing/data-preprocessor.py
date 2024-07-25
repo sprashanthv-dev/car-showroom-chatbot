@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from cols_config import excluded_cols, numeric_columns, MAX_COMPETITORS
+from cols_config import excluded_cols, numeric_columns
 from col_helpers import *
 
 # Ideal case => Chunk size = 1000, max_records = 10000
@@ -10,17 +10,15 @@ CHUNK_SIZE = 1000
 MAX_RECORDS = 10000
 
 src = "../data/original/used_cars_original.csv"
-dest = "data/processed/used_cars_processed.csv"
-
+dest = "../data/processed/used_cars_processed.csv"
 
 def get_competitors(df: pd.DataFrame) -> pd.DataFrame:
     competitor_info = []
 
     for index, row in df.iterrows():
-        # print(f"Processing row - {index}")
+        print(f"Processing row - {index}")
         competitors = get_competitor(df, row)
-
-        competitor_info.append(competitors['vin'].head(MAX_COMPETITORS).tolist())
+        competitor_info.append(competitors)
 
     df['competitors'] = competitor_info
 
@@ -43,6 +41,9 @@ def clean_records(source: str):
 
         if "body_type" in chunk.columns:
             chunk = format_body_type(chunk)
+
+        if "major_options" in chunk.columns:
+            chunk = format_major_options(chunk)
 
         for col in numeric_columns:
             if col in chunk.columns:
