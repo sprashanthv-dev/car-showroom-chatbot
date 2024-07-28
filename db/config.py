@@ -30,7 +30,6 @@ col_types = {
     'listing_color': 'TEXT',
     'listing_id': 'INTEGER',
     'longitude': 'REAL',
-    'main_picture_url': 'TEXT',
     'major_options': 'TEXT',
     'make_name': 'TEXT',
     'maximum_seating': 'TEXT',

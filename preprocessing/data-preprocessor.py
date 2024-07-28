@@ -7,7 +7,7 @@ from col_helpers import *
 
 # Ideal case => Chunk size = 1000, max_records = 10000
 CHUNK_SIZE = 1000
-MAX_RECORDS = 10000
+MAX_RECORDS = 40000
 
 src = "../data/original/used_cars_original.csv"
 dest = "../data/processed/used_cars_processed.csv"
@@ -16,10 +16,17 @@ dest = "../data/processed/used_cars_processed.csv"
 def get_competitors(df: pd.DataFrame) -> pd.DataFrame:
     competitor_info = []
 
+    count = 0
+    batch = 0
+
     for index, row in df.iterrows():
-        # print(f"Processing row - {index}")
+        if count % 1000 == 0:
+            batch += 1
+            print(f"Processed 1000 rows of batch - {batch}")
+
         competitors = get_competitor(df, row)
         competitor_info.append(competitors)
+        count += 1
 
     df['competitors'] = competitor_info
 

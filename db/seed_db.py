@@ -35,6 +35,9 @@ def transaction_bldr(sql):
     global sql_transaction
     sql_transaction.append(sql)
 
+    print(len(sql_transaction))
+    print("------------------------------")
+
     if len(sql_transaction) > BUFFER_SIZE:
         c.execute('BEGIN TRANSACTION')
 
@@ -43,7 +46,6 @@ def transaction_bldr(sql):
                 # print(f"Query before execute: {s}")
                 # print("------------------------------")
                 c.execute(s)
-                break
             except Exception as e:
                 print(f"Error in executing transaction: {e}")
                 print(f"sql: {s}")
@@ -60,7 +62,7 @@ def insert_into_car_specs():
     counter = 0
     batch = 0
 
-    with open(PROCESSED_CSV_PATH, "r", buffering=BUFFER_SIZE) as f:
+    with open(PROCESSED_CSV_PATH, "r", buffering=BUFFER_SIZE, encoding="utf8") as f:
         reader = csv.DictReader(f)
 
         for row in reader:
@@ -69,7 +71,7 @@ def insert_into_car_specs():
             for col in columns:
                 val = row[col]
 
-                if col == "major_options" or col == "main_picture_url":
+                if col == "major_options":
                     val = val.replace("'", "''")
 
                 values.append(val)
@@ -88,11 +90,11 @@ def insert_into_car_specs():
 
 def main():
 
-    # drop_table_car_specs()
-    # print(f"Successfully dropped table {TABLE_NAME}")
-    #
-    # create_table_car_specs()
-    # print(f"Successfully created table {TABLE_NAME}")
+    drop_table_car_specs()
+    print(f"Successfully dropped table {TABLE_NAME}")
+
+    create_table_car_specs()
+    print(f"Successfully created table {TABLE_NAME}")
 
     insert_into_car_specs()
     print(f"Successfully inserted all records into table {TABLE_NAME}")
